@@ -221,6 +221,7 @@ int Parser::eval() const {
                 && !ISUNARY(next_char) && GETPREC(next_char) <= GETPREC(operators.top())) {
 
                int rhs = operands.top();
+               int lhs;
                operands.pop();
                while(!operators.empty() && !operands.empty() && operators.top() != '(' &&
                       (
@@ -231,7 +232,7 @@ int Parser::eval() const {
                      if(ISUNARY(operators.top()))
                         rhs = eval_unary_op(rhs,operators.top());
                      else if(!operands.empty()) {
-                        int lhs = operands.top();
+                        lhs = operands.top();
                         operands.pop();
                         rhs = eval_bin_op(lhs,rhs,operators.top());
                      }
