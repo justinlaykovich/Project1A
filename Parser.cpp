@@ -224,11 +224,9 @@ int Parser::eval() const {
                int lhs;
                operands.pop();
                while(!operators.empty() && !operands.empty() && operators.top() != '(' &&
-                      (
-                        GETPREC(next_char) < GETPREC(operators.top()) ||
-                        operators.top() != '^' && GETPREC(next_char) == GETPREC(operators.top())
-                      )
-                    ){
+                      ( GETPREC(next_char) < GETPREC(operators.top()) ||
+                        GETPREC(next_char) == GETPREC(operators.top() != 7))){
+
                      if(ISUNARY(operators.top()))
                         rhs = eval_unary_op(rhs,operators.top());
                      else if(!operands.empty()) {
