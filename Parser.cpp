@@ -151,7 +151,7 @@ int Parser::eval() const {
                operators.pop();
             }
 
-            if(rhs == 0 && operators.top() == '/')
+            if(rhs == 0 && (operators.top() == '/' || operators.top() == '%'))
                throw std::invalid_argument("Division by zero");
 
             operands.push(rhs);
@@ -191,7 +191,7 @@ int Parser::eval() const {
                rhs = operands.top();
                operands.pop();
 
-               if(operators.top() == '/' && rhs == 0)
+               if(rhs == 0 && (operators.top() == '/' || operators.top() == '%'))
                   throw std::invalid_argument("Division by zero");
 
                if(ISUNARY(operators.top()))
@@ -218,14 +218,14 @@ int Parser::eval() const {
                throw std::invalid_argument("Expressions can't start with a binary operator");
 
             if (!operators.empty() && operators.top() != '(' && !operands.empty()
-                && !ISUNARY(next_char) && GETPREC(next_char) <= GETPREC(operators.top())) {
+                && !ISUNARY(next_char) && (GETPREC(next_char) <= GETPREC(operators.top()))) {
 
                int rhs = operands.top();
-               int lhs;
                operands.pop();
+               int lhs;
                while(!operators.empty() && !operands.empty() && operators.top() != '(' &&
-                      ( GETPREC(next_char) < GETPREC(operators.top()) ||
-                        GETPREC(next_char) == GETPREC(operators.top() != 7))){
+                      ( (GETPREC(next_char) < GETPREC(operators.top())) ||
+                        (GETPREC(next_char) == GETPREC(operators.top()) && GETPREC(operators.top()) != 7))){
 
                      if(ISUNARY(operators.top()))
                         rhs = eval_unary_op(rhs,operators.top());
