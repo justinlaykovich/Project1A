@@ -14,7 +14,6 @@ Parser::Parser(string sentence) {
    newSentence(sentence);
 }
 
-/* Stores a sanitized sentence instead of storing the sentence directly. */
 void Parser::newSentence(string input) {
    sentence = input;
 }
