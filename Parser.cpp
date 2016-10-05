@@ -234,6 +234,7 @@ int Parser::eval() const {
                         operands.pop();
                         rhs = eval_bin_op(lhs,rhs,operators.top());
                      }
+
                      operators.pop();
                }
 
