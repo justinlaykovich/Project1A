@@ -165,12 +165,11 @@ int Parser::eval() const {
             char newchar;
             tokens >> std::skipws >> newchar;
 
-            if(ISBINARY(newchar)) {
+            if(ISBINARY(newchar))
                if(PREV == START)
                   throw std::invalid_argument("Expressions can't start with a binary operator");
                else
                   throw std::invalid_argument("Parenthetical expressions can't start with a binary operator");
-            }
             else if(PREV==OPERAND || PREV==PARENS) {
 
                /*
@@ -228,6 +227,7 @@ int Parser::eval() const {
             if (!operators.empty() && operators.top() != '(' && !operands.empty()
                 && !ISUNARY(next_char) && (GETPREC(next_char) <= GETPREC(operators.top()))) {
 
+
                int rhs = operands.top();
                operands.pop();
                int lhs;
@@ -277,6 +277,7 @@ int Parser::eval() const {
 
    if(operands.size() > 1)
       throw std::invalid_argument("Evaluating all operators leaves multiple operands");
+
    if(operators.size() != 0)
       throw std::invalid_argument("Opening parenthesis with no closing parenthesis");
 
@@ -322,9 +323,9 @@ int Parser::eval_bin_op(const int& lhs, const int& rhs, const char& op) const
          if(rhs == 0)
 
             /*
-              This should be dealt with in the main loop and not here.
-              Should only be an issue if the logic of the main loop is changed
-              or invalid.
+               This should be dealt with in the main loop and not here.
+               Should only be an issue if the logic of the main loop is changed
+               or invalid.
             */
 
             throw std::invalid_argument("Unhandled division by zero");
