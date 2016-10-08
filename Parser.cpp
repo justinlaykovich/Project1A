@@ -161,7 +161,7 @@ int Parser::eval() const {
             tokens >> std::skipws >> newchar;
 
             if(ISBINARY(newchar)) {
-               if(POS(tokens) == 0)
+               if(PREV == -1)
                   throw std::invalid_argument("Expressions can't start with a binary operator");
                else
                   throw std::invalid_argument("Parenthetical expressions can't start with a binary operator");
@@ -181,7 +181,7 @@ int Parser::eval() const {
             operators.push('(');
          }
          else if(next_char == ')') {
-            if(POS(tokens) == 0)
+            if(PREV == -1)
                throw std::invalid_argument("Expressions can't start with a closing parenthesis");
 
             if(PREV != OPERAND && PREV != PARENS)
