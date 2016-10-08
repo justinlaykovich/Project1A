@@ -11,20 +11,20 @@ const string Parser::BINARYOPS = {'^','*','/','%','+',SUB,'>',GE,'<',LE,EQ,NE,AN
 const string Parser::OPS = {')','(','!',INC,DEC,'-','^','*','/','%','+',SUB,'>',GE,'<',LE,EQ,NE,AND,OR};
 const int Parser::PREC[] = {  9,  9,  8,  8,  8,  8,  7,  6,  6,  6,  5,  5,  4, 4,  4, 4, 3, 3,  2, 1};
 
-Parser::Parser(const string& sentence) {
+Parser::Parser(string sentence) {
    newSentence(sentence);
 }
 
-void Parser::newSentence(const string& input) {
+void Parser::newSentence(string input) {
    sentence = input;
 }
 
-int Parser::eval(const string& input) {
+int Parser::eval(string input) {
    newSentence(input);
    return eval();
 }
 
-string Parser::getSentence() const {
+string Parser::getSentence() const{
    return sentence;
 }
 
@@ -126,10 +126,9 @@ int Parser::eval() const {
    /*
       PREV Keeps track of the type of the previous token, whether it was an operand or whether it was
       an operator and what type.
-      The tokens are START, BINARY, UNARY, OPERAND, and PARENS.
+      The #defined tokens are BINARY, UNARY, and OPERAND, and PARENS. -1 is undefined.
    */
-
-   FLAG PREV = START;
+   int PREV = -1;
 
    try{
       while(tokens >> std::skipws >> next_char) {
@@ -165,8 +164,13 @@ int Parser::eval() const {
             char newchar;
             tokens >> std::skipws >> newchar;
 
+<<<<<<< HEAD
             if(ISBINARY(newchar))
                if(PREV == START)
+=======
+            if(ISBINARY(newchar)) {
+               if(PREV == -1)
+>>>>>>> parent of a0e2418... Enums and const references, for cleanliness and correctness.
                   throw std::invalid_argument("Expressions can't start with a binary operator");
                else
                   throw std::invalid_argument("Parenthetical expressions can't start with a binary operator");
@@ -185,7 +189,7 @@ int Parser::eval() const {
             operators.push('(');
          }
          else if(next_char == ')') {
-            if(PREV == START)
+            if(PREV == -1)
                throw std::invalid_argument("Expressions can't start with a closing parenthesis");
 
             if(PREV != OPERAND && PREV != PARENS)
