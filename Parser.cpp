@@ -226,6 +226,7 @@ int Parser::eval() const {
                int rhs = operands.top();
                operands.pop();
                int lhs;
+
                while(!operators.empty() && !operands.empty() && operators.top() != '(' &&
                       ( (GETPREC(next_char) < GETPREC(operators.top())) ||
                         ((GETPREC(next_char) == GETPREC(operators.top())) && GETPREC(operators.top()) != 7))){
@@ -244,16 +245,16 @@ int Parser::eval() const {
                operands.push(rhs);
             }
 
-            if(ISBINARY(next_char))
+            if(ISBINARY(next_char)) {
                if(PREV == BINARY)
                   throw std::invalid_argument("Two binary operations in a row");
                else if(PREV == UNARY)
                   throw std::invalid_argument("A unary operator can't be followed by a binary operator");
                else
                   PREV = BINARY;
-            else
-               if(ISUNARY(next_char))
-                  PREV = UNARY;
+            }
+            else if(ISUNARY(next_char))
+               PREV = UNARY;
 
             operators.push(next_char);
          }
