@@ -10,20 +10,20 @@ const string Parser::BINARYOPS = {'^','*','/','%','+',SUB,'>',GE,'<',LE,EQ,NE,AN
 const string Parser::OPS = {')','(','!',INC,DEC,'-','^','*','/','%','+',SUB,'>',GE,'<',LE,EQ,NE,AND,OR};
 const int Parser::PREC[] = {  9,  9,  8,  8,  8,  8,  7,  6,  6,  6,  5,  5,  4, 4,  4, 4, 3, 3,  2, 1};
 
-Parser::Parser(string sentence) {
+Parser::Parser(const string& sentence) {
    newSentence(sentence);
 }
 
-void Parser::newSentence(string input) {
+void Parser::newSentence(const string& input) {
    sentence = input;
 }
 
-int Parser::eval(string input) {
+int Parser::eval(const string& input) {
    newSentence(input);
    return eval();
 }
 
-string Parser::getSentence() const{
+string Parser::getSentence() const {
    return sentence;
 }
 
@@ -122,9 +122,10 @@ int Parser::eval() const {
    /*
       PREV Keeps track of the type of the previous token, whether it was an operand or whether it was
       an operator and what type.
-      The #defined tokens are BINARY, UNARY, and OPERAND, and PARENS. -1 is undefined.
+      The tokens are START, BINARY, UNARY, OPERAND, and PARENS.
    */
-   int PREV = -1;
+
+   FLAG PREV = START;
 
    try{
       while(tokens >> std::skipws >> next_char) {
@@ -161,7 +162,7 @@ int Parser::eval() const {
             tokens >> std::skipws >> newchar;
 
             if(ISBINARY(newchar)) {
-               if(PREV == -1)
+               if(PREV == START)
                   throw std::invalid_argument("Expressions can't start with a binary operator");
                else
                   throw std::invalid_argument("Parenthetical expressions can't start with a binary operator");
@@ -181,7 +182,7 @@ int Parser::eval() const {
             operators.push('(');
          }
          else if(next_char == ')') {
-            if(PREV == -1)
+            if(PREV == START)
                throw std::invalid_argument("Expressions can't start with a closing parenthesis");
 
             if(PREV != OPERAND && PREV != PARENS)
