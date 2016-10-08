@@ -17,11 +17,6 @@
 #define NE 'n'
 #define EQ 'e'
 
-#define OPERAND 0
-#define UNARY 1
-#define BINARY 2
-#define PARENS 4
-
 #define GETPREC(op) PREC[OPS.find(op)]
 #define ISUNARY(op) (UNARYOPS.find(op) != string::npos)
 #define ISBINARY(op) (BINARYOPS.find(op) != string::npos)
@@ -40,27 +35,28 @@ class Parser
 {
    public:
      Parser():Parser(""){};
-     Parser(string);
+     Parser(const string& sentence);
 
-     void newSentence(string);
+     void newSentence(const string& sentence);
      string getSentence() const;
      int eval() const;
-     int eval(string);
+     int eval(const string& sentence);
    private:
+     enum FLAG {
+        OPERAND,
+        UNARY,
+        BINARY,
+        PARENS,
+        START
+     };
      static const int PREC[];
      static const string UNARYOPS;
      static const string BINARYOPS;
      static const string OPS;
      string sentence;
 
-<<<<<<< HEAD
      int eval_bin_op(const int& lhs, const int& rhs, const char& op) const;
      int eval_unary_op(const int& rhs, const char& op) const;
      string sanitize(string sentence) const;
-=======
-     int eval_bin_op(int,int,char) const;
-     int eval_unary_op(int,char) const;
-     string sanitize(string) const;
->>>>>>> parent of a0e2418... Enums and const references, for cleanliness and correctness.
 };
 #endif
