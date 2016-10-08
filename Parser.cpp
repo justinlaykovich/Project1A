@@ -157,9 +157,15 @@ int Parser::eval() const {
             PREV = OPERAND;
          }
          else if(next_char == '(') {
-            if(ISBINARY(tokens.peek()))
-               throw std::invalid_argument("Parenthetical expressions can't start with a binary operator");
+            char newchar;
+            tokens >> std::skipws >> newchar;
 
+            if(ISBINARY(newchar)) {
+               if(POS(tokens) == 0)
+                  throw std::invalid_argument("Expressions can't start with a binary operator");
+               else
+                  throw std::invalid_argument("Parenthetical expressions can't start with a binary operator");
+            }
             else if(PREV==OPERAND || PREV==PARENS) {
 
                /*
@@ -171,6 +177,7 @@ int Parser::eval() const {
                PREV = BINARY;
             }
 
+            tokens.putback(newchar);
             operators.push('(');
          }
          else if(next_char == ')') {
@@ -213,9 +220,6 @@ int Parser::eval() const {
             PREV = PARENS;
          }
          else {
-            if(ISBINARY(next_char) && (POS(tokens) == 0))
-               throw std::invalid_argument("Expressions can't start with a binary operator");
-
             if (!operators.empty() && operators.top() != '(' && !operands.empty()
                 && !ISUNARY(next_char) && (GETPREC(next_char) <= GETPREC(operators.top()))) {
 
@@ -224,7 +228,7 @@ int Parser::eval() const {
                int lhs;
                while(!operators.empty() && !operands.empty() && operators.top() != '(' &&
                       ( (GETPREC(next_char) < GETPREC(operators.top())) ||
-                        (GETPREC(next_char) == GETPREC(operators.top()) && GETPREC(operators.top()) != 7))){
+                        ((GETPREC(next_char) == GETPREC(operators.top())) && GETPREC(operators.top()) != 7))){
 
                      if(ISUNARY(operators.top()))
                         rhs = eval_unary_op(rhs,operators.top());
