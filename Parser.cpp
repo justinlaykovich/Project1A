@@ -5,6 +5,7 @@
 */
 
 #include"Parser.h"
+
 const string Parser::UNARYOPS = {'!',INC,DEC,'-'};
 const string Parser::BINARYOPS = {'^','*','/','%','+',SUB,'>',GE,'<',LE,EQ,NE,AND,OR};
 const string Parser::OPS = {')','(','!',INC,DEC,'-','^','*','/','%','+',SUB,'>',GE,'<',LE,EQ,NE,AND,OR};
@@ -42,10 +43,12 @@ string Parser::sanitize(string sentence) const {
    size_t length = sentence.length() - 1;
 
    for(int i=length; i >= 1; --i) {
+
       /*
          Eval right to left to correctly pair unary operators
          with right hand operands.
       */
+
       x = sentence[i-1];
       y = sentence[i];
 
@@ -101,6 +104,7 @@ string Parser::sanitize(string sentence) const {
       This allows the expression to collapse in the same loop as that which collapses parentheses, so an additional
       outer loop is not necessary. Probably doesn't change efficiency, but makes it nicer.
    */
+
    result = "(" + result + ")";
    return result;
 }
@@ -265,6 +269,7 @@ int Parser::eval() const {
    catch(exception& e)
    {
       /* Format the message and throw to the calling function. */
+
       ostringstream oss;
       oss << e.what() << " @ char " << POS(tokens);
       throw std::invalid_argument(oss.str());
@@ -281,7 +286,8 @@ int Parser::eval() const {
 }
 
 /* Evals Unary operations. */
-int Parser::eval_unary_op(int rhs, char op) const
+
+int Parser::eval_unary_op(const int& rhs, const char& op) const
 {
    switch(op)
    {
@@ -303,7 +309,8 @@ int Parser::eval_unary_op(int rhs, char op) const
 }
 
 /* Evals Binary operations. */
-int Parser::eval_bin_op(int lhs, int rhs, char op) const
+
+int Parser::eval_bin_op(const int& lhs, const int& rhs, const char& op) const
 {
    switch(op)
    {
@@ -313,14 +320,19 @@ int Parser::eval_bin_op(int lhs, int rhs, char op) const
         return lhs * rhs;
       case '/':
          if(rhs == 0)
+
             /*
               This should be dealt with in the main loop and not here.
               Should only be an issue if the logic of the main loop is changed
               or invalid.
             */
+
             throw std::invalid_argument("Unhandled division by zero");
          return lhs / rhs;
       case '%':
+         if(rhs == 0)
+            throw std::invalid_argument("Unhandled modulo zero");
+
          return lhs % rhs;
       case '+':
          return lhs + rhs;

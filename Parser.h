@@ -55,8 +55,8 @@ class Parser
      static const string OPS;
      string sentence;
 
-     int eval_bin_op(int lhs, int rhs, char op) const;
-     int eval_unary_op(int rhs, char op) const;
+     int eval_bin_op(const int& lhs, const int& rhs, const char& op) const;
+     int eval_unary_op(const int& rhs, const char& op) const;
      string sanitize(string sentence) const;
 };
 #endif
