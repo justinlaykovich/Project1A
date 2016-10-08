@@ -165,11 +165,12 @@ int Parser::eval() const {
             char newchar;
             tokens >> std::skipws >> newchar;
 
-            if(ISBINARY(newchar))
+            if(ISBINARY(newchar)) {
                if(PREV == START)
                   throw std::invalid_argument("Expressions can't start with a binary operator");
                else
                   throw std::invalid_argument("Parenthetical expressions can't start with a binary operator");
+            }
             else if(PREV==OPERAND || PREV==PARENS) {
 
                /*
