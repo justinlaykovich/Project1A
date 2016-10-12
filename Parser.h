@@ -5,6 +5,7 @@
 #include<string>
 #include<stack>
 #include<sstream>
+#include<stdexcept>
 #include<cmath>
 
 #define LE 'l'
