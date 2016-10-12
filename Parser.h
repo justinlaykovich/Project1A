@@ -1,11 +1,12 @@
 #ifndef _PARSER_H
 #define _PARSER_H
 
-#include<iostream>
-#include<string>
-#include<stack>
-#include<sstream>
 #include<cmath>
+#include<iostream>
+#include<stack>
+#include<stdexcept>
+#include<sstream>
+#include<string>
 
 #define LE 'l'
 #define GE 'g'
